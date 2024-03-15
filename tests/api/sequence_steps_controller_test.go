@@ -77,7 +77,7 @@ func TestSequenceSteps(t *testing.T) {
 		baseStep.SequenceID = sequenceResult.ID // assign newly generated ID
 	})
 
-	var newStepId string
+	var newStepId uint
 
 	t.Run("Create", func(t *testing.T) {
 		checkBindJonAndValidation(t, http.MethodPost, stepsUrl)
@@ -96,8 +96,8 @@ func TestSequenceSteps(t *testing.T) {
 			json.NewDecoder(recorder.Body).Decode(&stepResult) // capture its ID (will be used in `update` tests below)
 
 			// now check the "by ID" endpoint
-			newStepId = api.UintToStr(stepResult.ID)
-			checkStepByID(t, stepsUrl+"/"+newStepId, baseStep)
+			newStepId = stepResult.ID
+			checkStepByID(t, buildUrl(stepsUrl, newStepId), baseStep)
 		})
 
 		t.Run("FailsWithDuplicateSubject", func(t *testing.T) {
@@ -106,10 +106,10 @@ func TestSequenceSteps(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		updateStepUrl := stepsUrl + "/" + newStepId
+		updateStepUrl := buildUrl(stepsUrl, newStepId)
 
 		t.Run("FailsForNonExistingStepID", func(t *testing.T) {
-			checkFailsWih404(t, http.MethodPut, stepsUrl+"/0")
+			checkFailsWih404(t, http.MethodPut, buildUrl(stepsUrl, 0))
 		})
 
 		checkBindJonAndValidation(t, http.MethodPut, updateStepUrl)
@@ -127,9 +127,9 @@ func TestSequenceSteps(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		deleteStepUrl := stepsUrl + "/" + newStepId
+		deleteStepUrl := buildUrl(stepsUrl, newStepId)
 		t.Run("FailsForNonExistingStepID", func(t *testing.T) {
-			checkFailsWih404(t, http.MethodDelete, stepsUrl+"/0")
+			checkFailsWih404(t, http.MethodDelete, buildUrl(stepsUrl, 0))
 		})
 
 		t.Run("Success", func(t *testing.T) {

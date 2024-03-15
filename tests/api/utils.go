@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sitetester/sequence-api/api"
 	"github.com/sitetester/sequence-api/config"
@@ -84,4 +85,9 @@ func checkFailsWih404(t *testing.T, method string, url string) {
 
 func deleteSequenceByName(name string) {
 	Db.Where("name = ?", name).Delete(&api.Sequence{}) // delete the existing record (if any)
+}
+
+// https://stackoverflow.com/questions/16474594/how-can-i-print-out-an-constant-uint64-in-go-using-fmt
+func buildUrl(base string, id uint) string {
+	return fmt.Sprintf("%s/%d", base, uint64(id))
 }

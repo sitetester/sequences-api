@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sitetester/sequence-api/api"
@@ -57,8 +56,7 @@ func (ssc *SequenceStepsController) Update(ctx *gin.Context) {
 	stepIDStr := ctx.Param("id")
 	stepID, err := api.StrToUint(stepIDStr)
 	if err != nil {
-		msg := fmt.Sprintf("Step ID must be integer: %s", stepIDStr)
-		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: msg})
+		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -87,8 +85,7 @@ func (ssc *SequenceStepsController) Delete(ctx *gin.Context) {
 	stepIDStr := ctx.Param("id")
 	stepID, err := api.StrToUint(stepIDStr)
 	if err != nil {
-		msg := fmt.Sprintf("Step ID must be integer: %s", stepIDStr)
-		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: msg})
+		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -106,8 +103,7 @@ func (ssc *SequenceStepsController) View(ctx *gin.Context) {
 	stepIDStr := ctx.Param("id")
 	stepID, err := api.StrToUint(stepIDStr)
 	if err != nil {
-		msg := fmt.Sprintf("Step ID must be integer: %s", stepIDStr)
-		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: msg})
+		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 

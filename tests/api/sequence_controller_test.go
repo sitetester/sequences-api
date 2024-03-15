@@ -54,7 +54,7 @@ func TestSequence(t *testing.T) {
 		ClickTrackingEnabled: true,
 	}
 
-	var newSequenceID string
+	var newSequenceID uint
 	t.Run("Create", func(t *testing.T) {
 		checkBindJsonAndValidation(t, http.MethodPost, sequencesUrl)
 
@@ -66,10 +66,10 @@ func TestSequence(t *testing.T) {
 
 			var postResult *api.Sequence
 			json.NewDecoder(recorder.Body).Decode(&postResult)
-			newSequenceID = api.UintToStr(postResult.ID)
+			newSequenceID = postResult.ID
 
 			// now check the "by ID" endpoint
-			checkByID(t, sequencesUrl+"/"+newSequenceID, baseSequence)
+			checkByID(t, buildUrl(sequencesUrl, newSequenceID), baseSequence)
 		})
 
 		t.Run("FailsForDuplicateName", func(t *testing.T) {
@@ -79,10 +79,10 @@ func TestSequence(t *testing.T) {
 
 	// CAUTION! This has dependency on ```postResult.ID``` (from `Create` step)
 	t.Run("Update", func(t *testing.T) {
-		updateUrl := sequencesUrl + "/" + newSequenceID
+		updateUrl := buildUrl(sequencesUrl, newSequenceID)
 
 		t.Run("FailsForNonExistingSequenceID", func(t *testing.T) {
-			checkFailsWih404(t, http.MethodPut, sequencesUrl+"/0")
+			checkFailsWih404(t, http.MethodPut, buildUrl(sequencesUrl, 0))
 		})
 
 		checkBindJsonAndValidation(t, http.MethodPut, updateUrl)
@@ -108,7 +108,7 @@ func TestSequence(t *testing.T) {
 
 			// Now try to change inputSequence2 name to inputSequence1
 			inputSequence2.Name = inputSequence1.Name
-			url := sequencesUrl + "/" + api.UintToStr(postResult2.ID)
+			url := buildUrl(sequencesUrl, postResult2.ID)
 			recorder = performRequest(t, http.MethodPut, url, inputSequence2)
 			checkStatusCode(t, http.StatusConflict, recorder.Code)
 			resp := parseErrorResponse(recorder)
@@ -135,7 +135,7 @@ func TestSequence(t *testing.T) {
 
 	t.Run("ViewWithSteps", func(t *testing.T) {
 		t.Run("FailsForNonExistingSequenceID", func(t *testing.T) {
-			checkFailsWih404(t, http.MethodGet, sequencesUrl+"/0")
+			checkFailsWih404(t, http.MethodGet, buildUrl(sequencesUrl, 0))
 		})
 
 		// `Success` case was already covered in `Create` & `Update` tests above

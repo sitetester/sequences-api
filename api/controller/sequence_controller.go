@@ -50,8 +50,7 @@ func (sc *SequenceController) Update(ctx *gin.Context) {
 	sequenceIDStr := ctx.Param("id")
 	sequenceID, err := api.StrToUint(sequenceIDStr)
 	if err != nil {
-		msg := fmt.Sprintf("Sequence ID must be integer: %s", sequenceIDStr)
-		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: msg})
+		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -91,8 +90,7 @@ func (sc *SequenceController) ViewWithSteps(ctx *gin.Context) {
 	sequenceIDStr := ctx.Param("id")
 	sequenceID, err := api.StrToUint(sequenceIDStr)
 	if err != nil {
-		msg := fmt.Sprintf("Sequence ID must be integer: %s", sequenceIDStr)
-		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: msg})
+		ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
