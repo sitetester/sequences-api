@@ -89,5 +89,5 @@ func deleteSequenceByName(name string) {
 
 // https://stackoverflow.com/questions/16474594/how-can-i-print-out-an-constant-uint64-in-go-using-fmt
 func buildUrl(base string, id uint) string {
-	return fmt.Sprintf("%s/%d", base, uint64(id))
+	return fmt.Sprintf("%s/%d", base, id)
 }
