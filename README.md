@@ -8,10 +8,10 @@ Each sequence step has email subject and content.
 
 API exposes these endpoints:
 
-1. Create a sequence with steps
-2. Update a sequence step (new subject or content)
-3. Delete a sequence step
-4. Update sequence open or click tracking
+- Create a sequence with steps
+- Update a sequence step (new subject or content)
+- Delete a sequence step
+- Update sequence open or click tracking
 
 
 ---
