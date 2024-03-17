@@ -130,8 +130,8 @@ func TestSequenceSteps(t *testing.T) {
 		deleteStepUrl := buildUrl(stepsUrl, newStepId)
 		t.Run("FailsForNonExistingStepID", func(t *testing.T) {
 			// math.MaxUint64 = 18446744073709551615
-			x := -1 // (18446744073709551615)
-			checkFailsWih404(t, http.MethodDelete, buildUrl(stepsUrl, uint(x)))
+			id := -1 // (18446744073709551615)
+			checkFailsWih404(t, http.MethodDelete, buildUrl(stepsUrl, uint(id)))
 		})
 
 		t.Run("Success", func(t *testing.T) {
